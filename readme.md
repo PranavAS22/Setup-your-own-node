@@ -10,11 +10,11 @@ Here’s a quick comparison of the main sync modes:
 
 | ***Node Type / Sync Mode*** | ***Sync Time***   | ***Disk Space*** | ***Data Stored***                              | ***Security*** | ***Use Case***                                |
 |---------------------------|-----------------|----------------|-----------------------------------------------|--------------|---------------------------------------------|
-| ***Snap Sync (Full Node)*** | ~2–11 hours     | 200–500 GB     | Latest state, headers, recent blocks (pruned) | ✅ High       | Recommended for most users                  |
-| ***Fast Sync (Full Node)*** | ~24+ hours      | 300–600 GB     | Latest state, headers, blocks                 | ✅ High       | Fallback option if snap isn't available     |
-| ***Full Node (Pruned)***    | Varies          | 300–600 GB     | Only recent state (~128 blocks)              | ✅ High       | DApp dev, staking                           |
-| ***Light Node***            | < 3 hours       | 300–500 MB     | Block headers only                           | ⚠️ Medium     | Mobile or limited-resource systems          |
-| ***Archive Node***          | 5–21 days       | 8–12 TB        | Full history and state diffs                 | 🔒 Highest    | Explorers, analytics, indexing              |
+| ***Snap Sync (Full Node)*** | ~2–11 hours     | 200–500 GB     | Latest state, headers, recent blocks (pruned) |  High       | Recommended for most users                  |
+| ***Fast Sync (Full Node)*** | ~24+ hours      | 300–600 GB     | Latest state, headers, blocks                 |  High       | Fallback option if snap isn't available     |
+| ***Full Node (Pruned)***    | Varies          | 300–600 GB     | Only recent state (~128 blocks)              |  High       | DApp dev, staking                           |
+| ***Light Node***            | < 3 hours       | 300–500 MB     | Block headers only                           |  Medium     | Mobile or limited-resource systems          |
+| ***Archive Node***          | 5–21 days       | 8–12 TB        | Full history and state diffs                 |  Highest    | Explorers, analytics, indexing              |
 
 
 I chose Snap Sync for its fast setup, low storage requirement, and high trust level, making it ideal for running a full node locally without needing massive resources.
