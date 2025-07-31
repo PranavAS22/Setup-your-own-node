@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c91cbb38-97dd-4319-b2eb-462ebdbf263b" />## Why someone need to run a node locally ?
+## Why someone need to run a node locally ?
 
 Running an Ethereum node locally lets you access the blockchain directly without relying on third-party services. It gives you full control, better privacy, and the ability to verify data yourself. It's essential for developers, researchers, and anyone who wants to support the Ethereum network or build truly decentralized applications.
 
