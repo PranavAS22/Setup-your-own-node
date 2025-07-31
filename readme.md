@@ -35,24 +35,24 @@ Note: You can also install it on other OS by following the offical guide.
 ## Here’s the exact process I followed: ##
 
 ### Step 1: Add the official Ethereum PPA repository ###
-``` sudo add-apt-repository -y ppa:ethereum/ethereum ```
+```sudo add-apt-repository -y ppa:ethereum/ethereum```
 
 ### Step 2: Update package lists ###
 
-```  sudo apt-get update ``` 
+```sudo apt-get update``` 
 
 ### Step 3: Install the stable version of Geth ###
 
-```  sudo apt-get install ethereum ``` 
+```sudo apt-get install ethereum``` 
 
 
 Note: You can also install the development version by running sudo apt-get install ethereum-unstable, but I chose the stable version.
 
 ### To verify that Geth was successfully installed, I ran: ###
 
-``` geth -v ```
+```geth -v```
 
 My installed version is:
 
-geth version 1.16.1-stable-12b4131f
+```geth version 1.16.1-stable-12b4131f```
 
