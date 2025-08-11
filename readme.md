@@ -66,7 +66,7 @@ geth --mainnet \
   --authrpc.jwtsecret=~/jwtsecret
 ```
   
-🔍 Explanation:
+Explanation:
 --mainnet: Connects to the Ethereum mainnet.
 
 --datadir: Specifies the data directory for storing blockchain data.
@@ -168,4 +168,205 @@ DNS misconfiguration.
 Or the endpoint is down/unavailable.
 I plan to try other recommended checkpoint endpoints until I find one that connects smoothly.
 
+---
+## Tring out Besu/teku setup
 
+## Besu Installation (Execution Layer) ##
+
+Update system good pratice 
+
+```sudo apt update```
+
+install java (both teku and besu are based on java)
+
+```sudo apt install openjdk-21-jdk -y```
+
+Note: try to install java 21 beccause i was having error in java 17  
+Error:  compiled by a more recent version of the Java Runtime (class file version 65.0), ... recognizes up to 61.0
+Error was caused because Besu 25.7.0 was compiled for Java 21
+
+check your install
+
+```java -version```
+
+my version: openjdk version "21.0.8"
+
+install the tar file: https://github.com/hyperledger/besu/releases
+change directory to the where the is been downloaded file 
+
+```tar -xvzf besu-<your version here>.tar.gz```
+
+Move to local folder
+
+```sudo mv besu-<your version here> /usr/local/besu```
+
+check the version:
+
+```besu –version```
+
+my version: besu/v25.7.0/linux-x86_64/openjdk-java-21
+
+## Teku Installation (Consensus Clients Layer) ##
+
+Update system good pratice 
+
+```sudo apt update```
+
+install java (both teku and besu are based on java)
+
+```sudo apt install openjdk-21-jdk -y```
+
+
+check your install
+
+```java -version```
+
+my version: openjdk version "21.0.8"
+
+Install the tar file (teku): https://github.com/ConsenSys/teku/releases
+change directory to the where the is been downloaded file
+
+```tar -xvzf teku-<your version here>.tar.gz```
+
+Move to local folder:
+
+```sudo mv teku-<your version here> /usr/local/teku```
+
+Create a shortcut so you can just type "teku"
+
+```sudo ln -s /usr/bin/teku-25.7.1/bin/teku /usr/bin/teku```
+
+ check  the version: 
+
+```teku –version```
+
+My version: teku/v25.7.1/linux-x86_64/-ubuntu-openjdk64bitservervm-java-21
+
+## Setting Up Besu and Teku (Execution + Consensus Clients)
+
+Note i have already made a jwtsecret file if not use command: 
+
+```openssl rand -hex 32 | tr -d "\n" > ~/jwtsecret```
+
+
+Besu command:
+
+```
+besu \
+  --data-path="$HOME/besu-data" \
+  --network=MAINNET \
+  --sync-mode=SNAP \
+  --rpc-http-enabled \
+  --rpc-http-host=0.0.0.0 \
+  --rpc-http-port=8545 \
+  --rpc-http-api=ETH,NET,WEB3 \
+  --engine-rpc-enabled \
+  --engine-rpc-port=8551 \
+  --engine-host-allowlist="*" \
+  --host-allowlist="*" \
+  --engine-jwt-secret="$HOME/jwtsecret
+```
+
+Explation:
+--data-path="$HOME/besu-data"
+
+Directory where Besu stores blockchain data, keys, and configs.
+$HOME/besu-data ensures it’s in your home directory (avoids permission issues).
+
+--network=MAINNET
+Connects Besu to Ethereum Mainnet (as opposed to Goerli, Sepolia, or a private chain).
+
+--sync-mode=SNAP
+Uses Snap Sync — downloads the latest state snapshot and recent history instead of syncing the entire chain from genesis.
+Much faster and uses less storage.
+
+--rpc-http-enabled
+Enables the HTTP JSON-RPC endpoint so external apps (e.g., wallets, DApps) can talk to the node.
+
+--rpc-http-host=0.0.0.0
+Allows RPC connections from any network interface (not just localhost).
+
+Be careful — this can expose your node publicly.
+--rpc-http-port=8545
+
+The port where the HTTP RPC server listens (8545 is the Ethereum default).
+--rpc-http-api=ETH,NET,WEB3
+
+Enables specific JSON-RPC APIs:
+ETH: Ethereum-specific calls (transactions, blocks, accounts).
+NET: Network information (e.g., peer count, chain ID).
+WEB3: Node-level info (client version, etc.).
+
+--engine-rpc-enabled
+Enables the Engine API, required for communication between execution and consensus clients after the Merge.
+
+--engine-rpc-port=8551
+Port for the Engine API server (default 8551).
+
+--engine-host-allowlist="*"
+Allows all hostnames to connect to the Engine API.
+Should be restricted in production for security.
+
+--host-allowlist="*"
+Same concept as above but applies to HTTP RPC connections.
+
+"*" = no restriction.
+
+--engine-jwt-secret="$HOME/jwtsecret"
+Path to the JWT secret used to authenticate between execution and consensus clients
+
+Teku command:
+
+```
+teku \
+  --data-path="$HOME/teku-data" \
+  --network=mainnet \
+  --ee-endpoint="http://127.0.0.1:8551" \
+  --ee-jwt-secret-file="$HOME/jwtsecret" \
+  --p2p-enabled=true \
+  --rest-api-enabled=true \
+  --rest-api-port=5051 \
+  --rest-api-host-allowlist="*" \
+  --metrics-enabled=true \
+  --metrics-port=8008 \
+  --checkpoint-sync-url="https://beaconstate-mainnet.chainsafe.io/"
+```
+
+Explation:
+--data-path="$HOME/teku-data"
+
+Directory where Teku stores beacon chain data, logs, and configurations.
+$HOME/teku-data avoids permission issues.
+
+--network=mainnet
+Runs Teku on Ethereum’s Mainnet.
+
+--ee-endpoint="http://127.0.0.1:8551"
+Specifies the Execution Engine (EE) API endpoint.
+This is your execution client (Geth/Besu) running on port 8551.
+
+--ee-jwt-secret-file="$HOME/jwtsecret"
+Path to the JWT authentication secret — must match the one used in your execution client so they can talk securely.
+
+--p2p-enabled=true
+Enables peer-to-peer networking so Teku can connect to other Ethereum nodes.
+
+--rest-api-enabled=true
+Turns on Teku’s REST API for monitoring and interacting with the node programmatically.
+
+--rest-api-port=5051
+Port where the REST API will be available.
+
+--rest-api-host-allowlist="*"
+Allows REST API access from all hosts.
+For security, you’d normally restrict this to localhost in production.
+
+--metrics-enabled=true
+Enables a Prometheus metrics endpoint for monitoring.
+
+--metrics-port=8008
+Port where Prometheus metrics are served.
+
+--checkpoint-sync-url="https://beaconstate-mainnet.chainsafe.io/"
+Uses Checkpoint Sync to start from a recent trusted state instead of syncing from genesis.
+This dramatically speeds up the initial sync.
