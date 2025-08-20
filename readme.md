@@ -416,6 +416,4 @@ to run the consense client:
   --checkpoint-sync-url=https://beaconstate.info
 ```
 
-![Screenshot](images/nether.png)
-
 
