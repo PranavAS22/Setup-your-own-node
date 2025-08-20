@@ -370,3 +370,47 @@ Port where Prometheus metrics are served.
 --checkpoint-sync-url="https://beaconstate-mainnet.chainsafe.io/"
 Uses Checkpoint Sync to start from a recent trusted state instead of syncing from genesis.
 This dramatically speeds up the initial sync.
+
+## Tring out Nethermind/Prysm setup
+
+## Nethermind Installation (Execution Layer) ##
+
+Download the zip  file: https://downloads.nethermind.io/
+
+install dependencies:
+
+```sudo apt-get install libsnappy-dev libc6-dev libc6 unzip```
+
+Extract the zip file 
+change directory to the where the is been extracted
+To run on the mainet: 
+
+
+```./Nethermind.Runner \
+  --config mainnet \
+  --Sync.SnapSync true \
+  --JsonRpc.JwtSecretFile=$HOME/jwtsecret
+```
+
+
+## Prysm Installation (Consensus Clients Layer) ##
+
+
+Download the file from: https://github.com/OffchainLabs/prysm/releases
+
+Hhange directry to where you downloaded the fie
+make the file executable: 
+
+```chmod +x beacon-chain-v6.0.4-linux-amd64```
+
+Move to local folder:
+
+```mv beacon-chain-v6.0.4-linux-amd64 prysm-beacon```
+
+to run the consense client:
+
+```../prysm-beacon \
+  --execution-endpoint=http://127.0.0.1:8551 \
+  --jwt-secret=$HOME/jwtsecret \
+  --genesis-beacon-api-url=https://beaconstate.info \
+  --checkpoint-sync-url=https://beaconstate.info```
