@@ -413,4 +413,7 @@ to run the consense client:
   --execution-endpoint=http://127.0.0.1:8551 \
   --jwt-secret=$HOME/jwtsecret \
   --genesis-beacon-api-url=https://beaconstate.info \
-  --checkpoint-sync-url=https://beaconstate.info```
+  --checkpoint-sync-url=https://beaconstate.info
+```
+
+![Screenshot](images/screenshot-2025-08-18.png)
