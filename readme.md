@@ -1,4 +1,4 @@
-<img width="1700" height="697" alt="Screenshot from 2025-08-18 12-33-22" src="https://github.com/user-attachments/assets/22edefe5-3b12-45d4-a434-45cdb717fc4c" />### Introduction ###
+### Introduction ###
 Running a local Ethereum node provides direct access to the Ethereum network without relying on third-party services. This improves security, decentralization, and reliability when developing, deploying, or interacting with smart contracts. It also enables full control over RPC endpoints, historical data access (depending on the node type), and increased understanding of how Ethereum operates under the hood.
 
 ## System Specifications ##
